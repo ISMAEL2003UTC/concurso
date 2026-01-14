@@ -21,6 +21,8 @@ class ListadoGestorScreen extends StatelessWidget {
             ),
           ),
           SizedBox(height: 20),
+
+          // BUSCADOR
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Container(
@@ -45,6 +47,7 @@ class ListadoGestorScreen extends StatelessWidget {
               ),
             ),
           ),
+
           SizedBox(height: 10),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
@@ -56,212 +59,84 @@ class ListadoGestorScreen extends StatelessWidget {
               ),
             ),
           ),
+
           SizedBox(height: 15),
+
+          // LISTADO
           Expanded(
             child: Column(
               children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Container(
-                    padding: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(
-                            Icons.shopping_bag,
-                            color: Colors.white,
-                            size: 22,
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'cat1',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              SizedBox(height: 4),
-                              Text(
-                                'Subtext',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.black54,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Text(
-                          '\$11.00',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Icon(Icons.chevron_right, color: Colors.grey),
-                      ],
-                    ),
-                  ),
-                ),
+                _item(context, 'cat1', Icons.shopping_bag),
                 SizedBox(height: 15),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Container(
-                    padding: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(
-                            Icons.shopping_bag,
-                            color: Colors.white,
-                            size: 22,
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'cat2',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              SizedBox(height: 4),
-                              Text(
-                                'Subtext',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.black54,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Text(
-                          '\$11.00',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Icon(Icons.chevron_right, color: Colors.grey),
-                      ],
-                    ),
-                  ),
-                ),
+                _item(context, 'cat2', Icons.shopping_bag),
                 SizedBox(height: 15),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                _item(context, 'cat3', Icons.local_cafe),
+              ],
+            ),
+          ),
+
+Padding(
+  padding: EdgeInsets.all(25),
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: [
+
+      // BOTÓN VOLVER
+      GestureDetector(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: Container(
+          width: 150,
+          padding: EdgeInsets.symmetric(vertical: 15),
+          decoration: BoxDecoration(
+            color: Color(0xFF6B5CE7),
+            borderRadius: BorderRadius.circular(25),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.arrow_back, color: Colors.white, size: 18),
+              SizedBox(width: 8),
+              Text(
+                'Volver',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+
+      // BOTÓN AGREGAR
+      GestureDetector(
+                  onTap: () {
+                    print("Agregar nuevo registro");
+                    // Aquí luego puedes navegar al formulario de agregar
+                  },
                   child: Container(
-                    padding: EdgeInsets.all(15),
+                    width: 150,
+                    padding: EdgeInsets.symmetric(vertical: 15),
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(25),
                     ),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(
-                            Icons.local_cafe,
-                            color: Colors.white,
-                            size: 22,
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'cat3',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              SizedBox(height: 4),
-                              Text(
-                                'Subtext',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.black54,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        Icon(Icons.add, color: Colors.white, size: 20),
+                        SizedBox(width: 5),
                         Text(
-                          '\$11.00',
+                          'Agregar',
                           style: TextStyle(
-                            fontSize: 16,
+                            color: Colors.white,
+                            fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: Colors.black87,
                           ),
                         ),
-                        SizedBox(width: 10),
-                        Icon(Icons.chevron_right, color: Colors.grey),
                       ],
                     ),
                   ),
@@ -269,40 +144,100 @@ class ListadoGestorScreen extends StatelessWidget {
               ],
             ),
           ),
-          Padding(
-              padding: EdgeInsets.all(25),
-              child: Center(
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    width: 250,
-                    padding: EdgeInsets.symmetric(vertical: 15),
-                    decoration: BoxDecoration(
-                      color: Color(0xFF6B5CE7),
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.arrow_back, color: Colors.white, size: 20),
-                        SizedBox(width: 10),
-                        Text(
-                          'Volver',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
+
+        ],
+      ),
+    );
+  }
+
+  // ITEM REUTILIZABLE
+  Widget _item(BuildContext context, String titulo, IconData icono) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Container(
+        padding: EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(icono, color: Colors.white, size: 22),
+            ),
+            SizedBox(width: 15),
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    titulo,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
                     ),
                   ),
-                ),
+                  SizedBox(height: 4),
+                  Text(
+                    'Subtext',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ],
               ),
             ),
-        ],
+
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  '\$11.00',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 5),
+
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        print("Editar $titulo");
+                      },
+                      child: Icon(Icons.edit, size: 20, color: Colors.blue),
+                    ),
+                    SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () {
+                        print("Eliminar $titulo");
+                      },
+                      child: Icon(Icons.delete, size: 20, color: Colors.red),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
