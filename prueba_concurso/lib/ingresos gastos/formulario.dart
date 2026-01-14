@@ -131,17 +131,44 @@ class _MovimientosFormScreenState extends State<MovimientosFormScreen> {
               SizedBox(height: 15),
 
               // FECHA
+              // FECHA
               TextFormField(
                 controller: fechaController,
+                readOnly: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'La fecha es obligatoria';
+                  }
+                  return null;
+                },
+                onTap: () async {
+                  FocusScope.of(context).requestFocus(FocusNode());
+
+                  DateTime? picked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                  );
+
+                  if (picked != null) {
+                    final fecha =
+                        "${picked.day.toString().padLeft(2, '0')}/"
+                        "${picked.month.toString().padLeft(2, '0')}/"
+                        "${picked.year}";
+                    fechaController.text = fecha;
+                  }
+                },
                 decoration: InputDecoration(
                   labelText: 'Fecha',
-                  hintText: 'DD/MM/AAAA',
+                  hintText: 'Seleccione una fecha',
                   prefixIcon: Icon(Icons.calendar_today),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
                 ),
               ),
+
 
               SizedBox(height: 80),
 

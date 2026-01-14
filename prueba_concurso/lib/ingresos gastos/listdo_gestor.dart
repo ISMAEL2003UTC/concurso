@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../models/movimientoModel.dart';
 import '../repositories/movimientos_repository.dart';
 import 'formulario.dart';
@@ -49,35 +48,64 @@ class _ListadoGestorScreenState extends State<ListadoGestorScreen> {
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context);
     final horizontalPadding = media.size.width * 0.04;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: const Color(0xFFF2F4F8),
+
+      // ---------------- APPBAR MODERNO ----------------
       appBar: AppBar(
-        title: const Text('Listado de Ingresos y gastos'),
+        elevation: 0,
+        centerTitle: true,
+        title: const Text(
+          'Movimientos',
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF7B1FA2), Color(0xFF9C27B0)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
       ),
+
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 10),
+            const SizedBox(height: 12),
+
+            // ---------------- HEADER ----------------
             Padding(
               padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
               child: const Text(
-                'Vea sus ingresos y gastos',
+                'Control de ingresos y gastos',
                 style: TextStyle(fontSize: 14, color: Colors.black54),
               ),
             ),
-            SizedBox(height: 10),
 
-            // LISTADO
+            const SizedBox(height: 12),
+
+            // ---------------- LISTADO ----------------
             Expanded(
               child: loading
                   ? const Center(child: CircularProgressIndicator())
                   : items.isEmpty
-                      ? const Center(child: Text('No hay registros'))
+                      ? const Center(
+                          child: Text(
+                            'No hay registros disponibles',
+                            style: TextStyle(color: Colors.black54),
+                          ),
+                        )
                       : ListView.separated(
-                          padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 12),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: horizontalPadding,
+                            vertical: 12,
+                          ),
                           itemCount: items.length,
-                          separatorBuilder: (_, __) => const SizedBox(height: 12),
+                          separatorBuilder: (_, __) => const SizedBox(height: 14),
                           itemBuilder: (context, index) {
                             final m = items[index];
                             return _item(context, m);
@@ -85,29 +113,45 @@ class _ListadoGestorScreenState extends State<ListadoGestorScreen> {
                         ),
             ),
 
+            // ---------------- BOTONES ----------------
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 12),
+              padding: EdgeInsets.symmetric(
+                horizontal: horizontalPadding,
+                vertical: 14,
+              ),
               child: Row(
                 children: [
                   Expanded(
-                    child: TextButton(
+                    child: ElevatedButton.icon(
                       onPressed: () => Navigator.pop(context),
-                      style: TextButton.styleFrom(
-                        backgroundColor: const Color(0xFF6B5CE7),
-                        padding: EdgeInsets.symmetric(vertical: media.size.height * 0.018),
+                      icon: const Icon(Icons.arrow_back),
+                      label: const Text('Volver'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                        padding: EdgeInsets.symmetric(
+                          vertical: media.size.height * 0.018,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
                       ),
-                      child: const Text('Volver', style: TextStyle(color: Colors.white)),
                     ),
                   ),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   Expanded(
-                    child: TextButton(
+                    child: ElevatedButton.icon(
                       onPressed: () => _openForm(),
-                      style: TextButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        padding: EdgeInsets.symmetric(vertical: media.size.height * 0.018),
+                      icon: const Icon(Icons.add),
+                      label: const Text('Agregar'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                        padding: EdgeInsets.symmetric(
+                          vertical: media.size.height * 0.018,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
                       ),
-                      child: const Text('Agregar', style: TextStyle(color: Colors.white)),
                     ),
                   ),
                 ],
@@ -119,60 +163,98 @@ class _ListadoGestorScreenState extends State<ListadoGestorScreen> {
     );
   }
 
+  // ---------------- ITEM ----------------
   Widget _item(BuildContext context, Movimientomodel m) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 4),
-      child: Container(
-        padding: EdgeInsets.all(15),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)],
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(8)),
-              child: Icon(Icons.attach_money, color: Colors.white, size: 22),
+    final isIngreso = m.tipo.toLowerCase().contains('ing');
+
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          // ICONO
+          Container(
+            width: 46,
+            height: 46,
+            decoration: BoxDecoration(
+              color: isIngreso
+                  ? Colors.green.withOpacity(0.15)
+                  : Colors.red.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(12),
             ),
-            SizedBox(width: 15),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(m.categoria, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-                  SizedBox(height: 4),
-                  Text(m.descripcion ?? '', style: TextStyle(fontSize: 13, color: Colors.black54)),
-                ],
-              ),
+            child: Icon(
+              isIngreso ? Icons.arrow_upward : Icons.arrow_downward,
+              color: isIngreso ? Colors.green : Colors.red,
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+          ),
+
+          const SizedBox(width: 12),
+
+          // TEXTO
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('\$${m.monto?.toStringAsFixed(2) ?? '0.00'}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-                SizedBox(height: 8),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    GestureDetector(
-                      onTap: () => _openForm(m),
-                      child: Icon(Icons.edit, size: 20, color: Colors.blue),
-                    ),
-                    SizedBox(width: 12),
-                    GestureDetector(
-                      onTap: () async {
-                        if (m.id != null) await _onDelete(m.id!);
-                      },
-                      child: Icon(Icons.delete, size: 20, color: Colors.red),
-                    ),
-                  ],
-                )
+                Text(
+                  m.categoria,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  m.descripcion ?? '',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: Colors.black54,
+                  ),
+                ),
               ],
             ),
-          ],
-        ),
+          ),
+
+          // MONTO Y ACCIONES
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                '\$${m.monto?.toStringAsFixed(2) ?? '0.00'}',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: isIngreso ? Colors.green : Colors.red,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => _openForm(m),
+                    child: const Icon(Icons.edit, size: 20, color: Colors.blue),
+                  ),
+                  const SizedBox(width: 14),
+                  GestureDetector(
+                    onTap: () async {
+                      if (m.id != null) await _onDelete(m.id!);
+                    },
+                    child: const Icon(Icons.delete, size: 20, color: Colors.red),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
