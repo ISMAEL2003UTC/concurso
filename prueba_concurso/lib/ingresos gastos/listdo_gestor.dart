@@ -12,7 +12,7 @@ class ListadoGestorScreen extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Text(
-              'Listado de categorías',
+              'Listado de Ingresos y gastos',
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
@@ -49,7 +49,7 @@ class ListadoGestorScreen extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Text(
-              'Lista de categorías existente',
+              'Vea sus ingresos y gastos',
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.black54,
