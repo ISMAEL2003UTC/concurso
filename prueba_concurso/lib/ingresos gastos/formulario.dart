@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/movimientoModel.dart';
-import '../repositories/movimientoRepositorio.dart';
+import '../repositories/movimientos_repository.dart';
 
 class MovimientosFormScreen extends StatefulWidget {
   const MovimientosFormScreen({super.key});
@@ -153,7 +153,7 @@ class _MovimientosFormScreenState extends State<MovimientosFormScreen> {
                     child: TextButton(
                       onPressed: () async {
                         if (formMovimiento.currentState!.validate()) {
-                          final repositorio = Movimientorepositorio();
+                          final repositorio = MovimientosRepository();
                           final movimiento = Movimientomodel(
                             descripcion: descripcionController.text,
                             categoria: categoriaController.text,

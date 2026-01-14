@@ -1,234 +1,168 @@
 import 'package:flutter/material.dart';
 
-class ListadoGestorScreen extends StatelessWidget {
+import '../models/movimientoModel.dart';
+import '../repositories/movimientos_repository.dart';
+import 'formulario.dart';
+
+class ListadoGestorScreen extends StatefulWidget {
+  @override
+  State<ListadoGestorScreen> createState() => _ListadoGestorScreenState();
+}
+
+class _ListadoGestorScreenState extends State<ListadoGestorScreen> {
+  final repo = MovimientosRepository();
+  List<Movimientomodel> items = [];
+  bool loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadItems();
+  }
+
+  Future<void> _loadItems() async {
+    setState(() => loading = true);
+    final list = await repo.getAll();
+    setState(() {
+      items = list;
+      loading = false;
+    });
+  }
+
+  Future<void> _onDelete(int id) async {
+    await repo.delete(id);
+    await _loadItems();
+  }
+
+  Future<void> _openForm([Movimientomodel? model]) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => MovimientosFormScreen(),
+        settings: RouteSettings(arguments: model),
+      ),
+    );
+    await _loadItems();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFF5F5F5),
+      appBar: AppBar(
+        title: Text('Listado de Ingresos y gastos'),
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 50),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
-              'Listado de Ingresos y gastos',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
-          ),
-          SizedBox(height: 20),
-
-          // BUSCADOR
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.grey.shade300),
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.search, color: Colors.grey, size: 22),
-                  SizedBox(width: 10),
-                  Text(
-                    'Buscar',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
           SizedBox(height: 10),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Text(
               'Vea sus ingresos y gastos',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.black54,
-              ),
+              style: TextStyle(fontSize: 14, color: Colors.black54),
             ),
           ),
-
-          SizedBox(height: 15),
+          SizedBox(height: 10),
 
           // LISTADO
           Expanded(
-            child: Column(
+            child: loading
+                ? Center(child: CircularProgressIndicator())
+                : items.isEmpty
+                    ? Center(child: Text('No hay registros'))
+                    : ListView.separated(
+                        padding: EdgeInsets.all(16),
+                        itemCount: items.length,
+                        separatorBuilder: (_, __) => SizedBox(height: 12),
+                        itemBuilder: (context, index) {
+                          final m = items[index];
+                          return _item(context, m);
+                        },
+                      ),
+          ),
+
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _item(context, 'cat1', Icons.shopping_bag),
-                SizedBox(height: 15),
-                _item(context, 'cat2', Icons.shopping_bag),
-                SizedBox(height: 15),
-                _item(context, 'cat3', Icons.local_cafe),
-              ],
-            ),
-          ),
-
-Padding(
-  padding: EdgeInsets.all(25),
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: [
-
-      // BOTÓN VOLVER
-      GestureDetector(
-        onTap: () {
-          Navigator.pop(context);
-        },
-        child: Container(
-          width: 150,
-          padding: EdgeInsets.symmetric(vertical: 15),
-          decoration: BoxDecoration(
-            color: Color(0xFF6B5CE7),
-            borderRadius: BorderRadius.circular(25),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.arrow_back, color: Colors.white, size: 18),
-              SizedBox(width: 8),
-              Text(
-                'Volver',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
+                // VOLVER
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: TextButton.styleFrom(
+                      backgroundColor: Color(0xFF6B5CE7),
+                      padding: EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    child: Text('Volver', style: TextStyle(color: Colors.white)),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
-      ),
-
-      // BOTÓN AGREGAR
-      GestureDetector(
-                  onTap: () {
-                    print("Agregar nuevo registro");
-                    // Aquí luego puedes navegar al formulario de agregar
-                  },
-                  child: Container(
-                    width: 150,
-                    padding: EdgeInsets.symmetric(vertical: 15),
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(25),
+                SizedBox(width: 12),
+                // AGREGAR
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => _openForm(),
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      padding: EdgeInsets.symmetric(vertical: 14),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.add, color: Colors.white, size: 20),
-                        SizedBox(width: 5),
-                        Text(
-                          'Agregar',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
+                    child: Text('Agregar', style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ],
             ),
           ),
-
         ],
       ),
     );
   }
 
-  // ITEM REUTILIZABLE
-  Widget _item(BuildContext context, String titulo, IconData icono) {
+  Widget _item(BuildContext context, Movimientomodel m) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 4),
       child: Container(
         padding: EdgeInsets.all(15),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: Offset(0, 2),
-            ),
-          ],
+          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)],
         ),
         child: Row(
           children: [
             Container(
               width: 40,
               height: 40,
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(icono, color: Colors.white, size: 22),
+              decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(8)),
+              child: Icon(Icons.attach_money, color: Colors.white, size: 22),
             ),
             SizedBox(width: 15),
-
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    titulo,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
-                    ),
-                  ),
+                  Text(m.categoria, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                   SizedBox(height: 4),
-                  Text(
-                    'Subtext',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.black54,
-                    ),
-                  ),
+                  Text(m.descripcion ?? '', style: TextStyle(fontSize: 13, color: Colors.black54)),
                 ],
               ),
             ),
-
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(
-                  '\$11.00',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(height: 5),
-
+                Text('\$${m.monto?.toStringAsFixed(2) ?? '0.00'}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                SizedBox(height: 8),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     GestureDetector(
-                      onTap: () {
-                        print("Editar $titulo");
-                      },
+                      onTap: () => _openForm(m),
                       child: Icon(Icons.edit, size: 20, color: Colors.blue),
                     ),
-                    SizedBox(width: 10),
+                    SizedBox(width: 12),
                     GestureDetector(
-                      onTap: () {
-                        print("Eliminar $titulo");
+                      onTap: () async {
+                        if (m.id != null) await _onDelete(m.id!);
                       },
                       child: Icon(Icons.delete, size: 20, color: Colors.red),
                     ),
