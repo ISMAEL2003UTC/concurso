@@ -47,73 +47,74 @@ class _ListadoGestorScreenState extends State<ListadoGestorScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final media = MediaQuery.of(context);
+    final horizontalPadding = media.size.width * 0.04;
     return Scaffold(
-      backgroundColor: Color(0xFFF5F5F5),
+      backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        title: Text('Listado de Ingresos y gastos'),
+        title: const Text('Listado de Ingresos y gastos'),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 10),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
-              'Vea sus ingresos y gastos',
-              style: TextStyle(fontSize: 14, color: Colors.black54),
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 10),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+              child: const Text(
+                'Vea sus ingresos y gastos',
+                style: TextStyle(fontSize: 14, color: Colors.black54),
+              ),
             ),
-          ),
-          SizedBox(height: 10),
+            SizedBox(height: 10),
 
-          // LISTADO
-          Expanded(
-            child: loading
-                ? Center(child: CircularProgressIndicator())
-                : items.isEmpty
-                    ? Center(child: Text('No hay registros'))
-                    : ListView.separated(
-                        padding: EdgeInsets.all(16),
-                        itemCount: items.length,
-                        separatorBuilder: (_, __) => SizedBox(height: 12),
-                        itemBuilder: (context, index) {
-                          final m = items[index];
-                          return _item(context, m);
-                        },
+            // LISTADO
+            Expanded(
+              child: loading
+                  ? const Center(child: CircularProgressIndicator())
+                  : items.isEmpty
+                      ? const Center(child: Text('No hay registros'))
+                      : ListView.separated(
+                          padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 12),
+                          itemCount: items.length,
+                          separatorBuilder: (_, __) => const SizedBox(height: 12),
+                          itemBuilder: (context, index) {
+                            final m = items[index];
+                            return _item(context, m);
+                          },
+                        ),
+            ),
+
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: TextButton.styleFrom(
+                        backgroundColor: const Color(0xFF6B5CE7),
+                        padding: EdgeInsets.symmetric(vertical: media.size.height * 0.018),
                       ),
-          ),
-
-          Padding(
-            padding: EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                // VOLVER
-                Expanded(
-                  child: TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    style: TextButton.styleFrom(
-                      backgroundColor: Color(0xFF6B5CE7),
-                      padding: EdgeInsets.symmetric(vertical: 14),
+                      child: const Text('Volver', style: TextStyle(color: Colors.white)),
                     ),
-                    child: Text('Volver', style: TextStyle(color: Colors.white)),
                   ),
-                ),
-                SizedBox(width: 12),
-                // AGREGAR
-                Expanded(
-                  child: TextButton(
-                    onPressed: () => _openForm(),
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      padding: EdgeInsets.symmetric(vertical: 14),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () => _openForm(),
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        padding: EdgeInsets.symmetric(vertical: media.size.height * 0.018),
+                      ),
+                      child: const Text('Agregar', style: TextStyle(color: Colors.white)),
                     ),
-                    child: Text('Agregar', style: TextStyle(color: Colors.white)),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
